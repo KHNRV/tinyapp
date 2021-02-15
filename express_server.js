@@ -23,7 +23,7 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
-  res.render("./pages/urls_index", templateVars);
+  res.render("urls_index", templateVars);
 });
 
 app.get("/hello", (req, res) => {
