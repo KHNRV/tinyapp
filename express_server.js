@@ -2,11 +2,37 @@
 const express = require("express");
 const app = express();
 
+// import bodyParser library
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // configure the server port
 const PORT = 8080; // default port 8080
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
+
+/**
+ * This function outputs a random string of 6 characters composed of numbers and mixed cased alphabetical characters.
+ * @returns Random string of six characters
+ */
+const generateRandomString = () => {
+  // Define string of all the possible character to be used to generate the
+  // unique short URL ID
+  const characterSet =
+    "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789";
+  // Define an empty array
+  const result = [];
+  // Push a random character from the characterSet to the array
+  while (result.length < 6) {
+    result.push(
+      characterSet[Math.floor(Math.random() * (characterSet.length - 1))]
+    );
+  }
+
+  // return the result array
+  return result;
+};
 
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
@@ -18,17 +44,19 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-// Routing
+// POST ROUTING
+app.post("/urls", (req, res) => {
+  console.log(req.body); // Log the POST request body to the console
+  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+});
+
+// GET ROUTING
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL],
-  };
-  res.render("urls_show", templateVars);
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -42,4 +70,12 @@ app.get("/urls", (req, res) => {
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+app.get("/urls/:shortURL", (req, res) => {
+  const templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
+  };
+  res.render("urls_show", templateVars);
 });
