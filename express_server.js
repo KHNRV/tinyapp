@@ -49,7 +49,7 @@ app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
   console.log("New short URL:", shortURL); // Log the new shortURL
   urlDatabase[shortURL] = req.body.longURL; // add the new entry to the db
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+  res.redirect(`urls/${shortURL}`);
 });
 
 // GET ROUTING
