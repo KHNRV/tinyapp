@@ -21,16 +21,15 @@ const generateRandomString = () => {
   // unique short URL ID
   const characterSet =
     "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789";
-  // Define an empty array
-  const result = [];
+  // Define an empty string
+  let result = "";
   // Push a random character from the characterSet to the array
   while (result.length < 6) {
-    result.push(
-      characterSet[Math.floor(Math.random() * (characterSet.length - 1))]
-    );
+    result +=
+      characterSet[Math.floor(Math.random() * (characterSet.length - 1))];
   }
 
-  // return the result array
+  // return the result array as a string
   return result;
 };
 
@@ -46,7 +45,9 @@ app.listen(PORT, () => {
 
 // POST ROUTING
 app.post("/urls", (req, res) => {
+  const shortURL = generateRandomString();
   console.log(req.body); // Log the POST request body to the console
+  console.log("New short URL:", shortURL);
   res.send("Ok"); // Respond with 'Ok' (we will replace this)
 });
 
