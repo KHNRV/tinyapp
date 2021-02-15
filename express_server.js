@@ -81,3 +81,14 @@ app.get("/urls/:shortURL", (req, res) => {
   };
   res.render("urls_show", templateVars);
 });
+
+app.get("/u/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL;
+  const longURL = urlDatabase[shortURL];
+  // Check if URL exists in DB
+  if (Object.keys(urlDatabase).includes(shortURL)) {
+    res.redirect(longURL);
+  } else {
+    res.status(404).end();
+  }
+});
