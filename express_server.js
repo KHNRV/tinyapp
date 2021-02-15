@@ -5,13 +5,13 @@ const app = express();
 // configure the server port
 const PORT = 8080; // default port 8080
 
+// set the view engine to ejs
+app.set("view engine", "ejs");
+
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
 };
-
-// set the view engine to ejs
-app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -19,6 +19,11 @@ app.get("/", (req, res) => {
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
+});
+
+app.get("/urls", (req, res) => {
+  const templateVars = { urls: urlDatabase };
+  res.render("./pages/urls_index", templateVars);
 });
 
 app.get("/hello", (req, res) => {
