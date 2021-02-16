@@ -39,7 +39,7 @@ const urlDatabase = {
 
 // Print in the console when the server is running
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`TinyURL is listening on port ${PORT}!`);
 });
 
 // POST ROUTING
@@ -68,7 +68,10 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 // Login
-app.post("/login", (req, res) => {});
+app.post("/login", (req, res) => {
+  console.log(req.body.username);
+  res.cookie("username", req.body.username);
+});
 
 // GET ROUTING
 app.get("/", (req, res) => {
