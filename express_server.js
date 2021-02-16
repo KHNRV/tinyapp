@@ -1,16 +1,15 @@
-// import the express library
 const express = require("express");
 const app = express();
 
-// import bodyParser library
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// configure the server port
-const PORT = 8080; // default port 8080
+const cookieParser = require("cookie-parser");
 
-// set the view engine to ejs
+// Configure Express
+const PORT = 8080; // default port 8080
 app.set("view engine", "ejs");
+app.use(cookieParser());
 
 /**
  * This function outputs a random string of 6 characters composed of numbers and mixed cased alphabetical characters.
@@ -67,6 +66,9 @@ app.post("/urls/:shortURL", (req, res) => {
   urlDatabase[shortURL] = newURL;
   res.redirect(`/urls/${shortURL}`);
 });
+
+// Login
+app.post("/login", (req, res) => {});
 
 // GET ROUTING
 app.get("/", (req, res) => {
