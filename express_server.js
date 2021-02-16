@@ -54,10 +54,13 @@ app.post("/urls", (req, res) => {
 
 // Delete a redirection
 app.post("/urls/:shortURL/delete", (req, res) => {
+  console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
   const shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];
   res.redirect("/urls");
 });
+
+// app.post();
 
 // GET ROUTING
 app.get("/", (req, res) => {
