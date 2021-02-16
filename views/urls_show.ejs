@@ -23,10 +23,12 @@
             <%= shortURL %>
           </a>
         </p>
+
+      </div>
+      <div class="card-footer text-muted">
         <form method="POST" action="/urls/<%= shortURL %> "><input type="url" name="newURL" id="newurl"><input
             type="submit" value="Update this TinyURL"></form>
       </div>
-      <div class="card-footer text-muted"></div>
     </div>
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
