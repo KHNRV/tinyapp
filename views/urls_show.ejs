@@ -23,8 +23,8 @@
             <%= shortURL %>
           </a>
         </p>
-        <form method="POST" action=""><input type="url" name="New URL to Redirect" id=""><input type="submit"
-            value="Update this TinyURL"></form>
+        <form method="POST" action="/urls/<%= shortURL %> "><input type="url" name="newURL" id="newurl"><input
+            type="submit" value="Update this TinyURL"></form>
       </div>
       <div class="card-footer text-muted"></div>
     </div>
