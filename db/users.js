@@ -2,6 +2,11 @@ const { generateRandomString } = require("../helper/generate");
 
 const users = {
   register: function(user) {
+    // Is entry valid user?
+    if (!user.email || !user.password) {
+      return null;
+    }
+
     // Define newID
     let newID;
     // Generate a ID that does not exist in the db

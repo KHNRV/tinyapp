@@ -53,8 +53,12 @@ app.post("/register", (req, res) => {
   console.log(req.body);
   console.log(users);
   const newUser = users.register(req.body);
-  res.cookie("user_id", newUser.id);
-  res.redirect("/urls");
+  if (newUser) {
+    res.cookie("user_id", newUser.id);
+    res.redirect("/urls");
+  } else {
+    res.status(404).end("404");
+  }
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
