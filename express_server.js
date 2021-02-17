@@ -43,9 +43,13 @@ app.post("/logout", (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
-  console.log(req.body.username);
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
+  const matchingUserID = users.loginCheck(req.body);
+  if (matchingUserID) {
+    res.cookie("user_id", matchingUserID);
+    res.redirect("/urls");
+  } else {
+    res.status(403).end("403");
+  }
 });
 
 // Registration
