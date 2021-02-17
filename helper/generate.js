@@ -33,8 +33,8 @@ const isEmailDuplicate = (email, users) => {
   for (const user of usersArr) {
     console.log("user.email:", user.email);
     if (email === user.email) {
-      // if yes, return true
-      return true;
+      // if yes, return user id
+      return user.id;
     }
     // if no, return false
   }
