@@ -92,8 +92,12 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const templateVars = { user: users[req.cookies["user_id"]] };
-  res.render("urls_new", templateVars);
+  if (users[req.cookies["user_id"]]) {
+    const templateVars = { user: users[req.cookies["user_id"]] };
+    res.render("urls_new", templateVars);
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.get("/urls.json", (req, res) => {
