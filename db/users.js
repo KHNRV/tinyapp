@@ -5,7 +5,7 @@ const {
 
 const users = {
   register: function(user) {
-    // Is entry valid user?
+    // Is entry valid ?
     if (!user.email || !user.password) {
       return null;
     }
@@ -27,6 +27,19 @@ const users = {
     this[newID] = { id: newID, email, password };
     // Return new user
     return this[newID];
+  },
+  loginCheck: function(credentials) {
+    // Test if the email exists
+    const userID = isEmailDuplicate(credentials.email, this);
+    if (userID) {
+      // Test if the associated password match the user input
+      if (credentials.password === this[userID].password) {
+        // Return userID if match
+        return userID;
+      }
+    }
+    // Return "" otherwise
+    return "";
   },
   "kevin.nicolas": {
     id: "kevin.nicolas",
