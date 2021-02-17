@@ -7,12 +7,12 @@ const users = {
     // Generate a ID that does not exist in the db
     do {
       newID = generateRandomString();
-    } while (!Object.keys(this).includes(newID));
+    } while (Object.keys(this).includes(newID));
     // Get the user details
     const { email, password } = user;
     // Register the user in the db under newID
     this[newID] = { id: newID, email, password };
-
+    console.log(this[newID]);
     // Return new user
     return this[newID];
   },
