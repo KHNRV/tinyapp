@@ -12,7 +12,6 @@ const users = {
     const { email, password } = user;
     // Register the user in the db under newID
     this[newID] = { id: newID, email, password };
-    console.log(this[newID]);
     // Return new user
     return this[newID];
   },
