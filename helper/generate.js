@@ -31,13 +31,14 @@ const isEmailDuplicate = (email, users) => {
   const usersArr = Object.values(users);
   // check if the email exist
   for (const user of usersArr) {
+    console.log("user.email:", user.email);
     if (email === user.email) {
       // if yes, return true
       return true;
     }
     // if no, return false
-    return false;
   }
+  return false;
 };
 
 module.exports = { generateRandomString, isEmailDuplicate };
