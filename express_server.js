@@ -52,6 +52,19 @@ app.post("/urls", (req, res) => {
 });
 
 // Delete a redirection
+// Logout
+app.post("/logout", (req, res) => {
+  res.clearCookie("username");
+  res.redirect("/urls");
+});
+
+// Login
+app.post("/login", (req, res) => {
+  console.log(req.body.username);
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
+
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];
@@ -67,13 +80,6 @@ app.post("/urls/:shortURL", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-// Login
-app.post("/login", (req, res) => {
-  console.log(req.body.username);
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
-});
-
 // GET ROUTING
 app.get("/urls/new", (req, res) => {
   const templateVars = { username: req.cookies["username"] };
@@ -85,7 +91,13 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase, username: req.cookies["username"] };
+  const templateVars = {
+    urls: urlDatabase,
+    username: "",
+  };
+
+  templateVars.username = req.cookies["username"];
+
   res.render("urls_index", templateVars);
 });
 
