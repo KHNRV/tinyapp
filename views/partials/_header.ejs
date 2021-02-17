@@ -15,9 +15,8 @@
       <form action="/logout" method="POST"><b>Logged In As: <%= user.email %> </b><button type="submit">Logout</button>
       </form>
       <% } else { %>
-        <form action="/login" method="POST"><input type="text" name="username" id=""><button
-            type="submit">Login</button>
-        </form>
+        <form action="/register" method="GET"><button type="submit">Register</button></form>
+        <form action="/login" method="GET"><button type="submit">Login</button></form>
         <% } %>
   </nav>
 </header>
