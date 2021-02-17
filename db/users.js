@@ -1,9 +1,17 @@
-const { generateRandomString } = require("../helper/generate");
+const {
+  generateRandomString,
+  isEmailDuplicate,
+} = require("../helper/generate");
 
 const users = {
   register: function(user) {
     // Is entry valid user?
     if (!user.email || !user.password) {
+      return null;
+    }
+
+    // Is email already used
+    if (isEmailDuplicate(user.email, this)) {
       return null;
     }
 
