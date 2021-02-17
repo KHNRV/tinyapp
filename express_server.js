@@ -57,7 +57,7 @@ app.post("/register", (req, res) => {
     res.cookie("user_id", newUser.id);
     res.redirect("/urls");
   } else {
-    res.status(404).end("404");
+    res.status(400).end("400");
   }
 });
 
