@@ -13,6 +13,8 @@ app.use(cookieParser());
 
 const { generateRandomString } = require("./helper/generate.js");
 
+const { users } = require("./db/users");
+
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
@@ -43,6 +45,14 @@ app.post("/logout", (req, res) => {
 app.post("/login", (req, res) => {
   console.log(req.body.username);
   res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
+
+// Registration
+app.post("/register", (req, res) => {
+  console.log(req.body);
+  console.log(users);
+  users.register(req.body);
   res.redirect("/urls");
 });
 
