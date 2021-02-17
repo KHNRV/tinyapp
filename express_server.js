@@ -25,7 +25,6 @@ app.post("/urls", (req, res) => {
   res.redirect(`urls/${shortURL}`);
 });
 
-// Delete a redirection
 // Logout
 app.post("/logout", (req, res) => {
   res.clearCookie("user_id");
@@ -56,6 +55,7 @@ app.post("/register", (req, res) => {
   }
 });
 
+// Delete a redirection
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];
