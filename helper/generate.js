@@ -19,4 +19,25 @@ const generateRandomString = () => {
   return result;
 };
 
-module.exports = { generateRandomString };
+/**
+ * This function output whether if a given email exist already in a given
+ * database of users
+ * @param {string} email
+ * @param {object} users
+ * @return {boolean}
+ */
+const isEmailDuplicate = (email, users) => {
+  // make users db an array
+  const usersArr = Object.values(users);
+  // check if the email exist
+  for (const user of usersArr) {
+    if (email === user.email) {
+      // if yes, return true
+      return true;
+    }
+    // if no, return false
+    return false;
+  }
+};
+
+module.exports = { generateRandomString, isEmailDuplicate };
