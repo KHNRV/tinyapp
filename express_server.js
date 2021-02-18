@@ -98,7 +98,7 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const templateVars = {
-    urls: urlDatabase,
+    urls: urlDatabase.getUrlsForUser(req.cookies["user_id"]),
     user: users[req.cookies["user_id"]],
   };
   res.render("urls_index", templateVars);

@@ -41,6 +41,18 @@ class UrlDB {
   getLongUrl(linkID) {
     return this[linkID].longURL;
   }
+  getUrlsForUser(userID) {
+    // Define userLinks object
+    const userLinks = {};
+
+    // Iterate in this db
+    for (const urlID in this) {
+      if (this[urlID].userID === userID) {
+        userLinks[urlID] = this[urlID];
+      }
+    }
+    return userLinks;
+  }
 }
 
 const urlDatabase = new UrlDB();
