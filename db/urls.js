@@ -13,7 +13,7 @@ class UrlDB {
     // Generate a unique newShortURL
     do {
       newShortURL = generateRandomString();
-    } while (this.newShortURL);
+    } while (this[newShortURL]);
     // add the redirection to the db
     this[newShortURL] = { longURL, userID };
     // return  newTinyURL object
