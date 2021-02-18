@@ -20,7 +20,61 @@ app.use(
   })
 );
 
-// URLS ROUTES
+/**
+ *
+ * USER AUTHENTIFICATION ROUTES
+ *
+ */
+
+// ./register >> User registration page (GET) and registration submission (POST)
+app
+  .route("/register")
+  .get((req, res) => {
+    const templateVars = { user: users[req.session.user_id] };
+    res.render("register", templateVars);
+  })
+  .post((req, res) => {
+    console.log(req.body);
+    console.log(users);
+    const newUser = users.register(req.body);
+    if (newUser) {
+      req.session.user_id = newUser.id;
+      res.redirect("/urls");
+    } else {
+      res.status(400).end("400");
+    }
+  });
+
+// ./login >> User login page (GET) and login submission (POST)
+app
+  .route("/login")
+  .get((req, res) => {
+    const templateVars = { user: users[req.session.user_id] };
+    res.render("login", templateVars);
+  })
+  .post((req, res) => {
+    const matchingUserID = users.loginCheck(req.body);
+    if (matchingUserID) {
+      req.session.user_id = matchingUserID;
+      res.redirect("/urls");
+    } else {
+      res.status(403).end("403");
+    }
+  });
+
+// ./logout >> Logging out user by clearing cookie
+app.post("/logout", (req, res) => {
+  req.session = null;
+  res.redirect("/urls");
+});
+
+/**
+ *
+ * URL ROUTES
+ *
+ */
+
+// ./urls >> List all of users redirections if logged in
 app
   .route("/urls")
   .get((req, res) => {
@@ -42,13 +96,17 @@ app
     res.redirect(`urls/${shortURL}`);
   });
 
-// Delete a redirection
-app.post("/urls/:shortURL/delete", (req, res) => {
-  urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
-  res.redirect("/urls");
-  console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
+// ./urls/new >> New redirection form
+app.get("/urls/new", (req, res) => {
+  if (users[req.session.user_id]) {
+    const templateVars = { user: users[req.session.user_id] };
+    res.render("urls_new", templateVars);
+  } else {
+    res.redirect("/login");
+  }
 });
 
+// ./urls/:shortURL >> See  the state (GET) or modify the reidirection (POST)
 app
   .route("/urls/:shortURL")
   .get((req, res) => {
@@ -68,19 +126,19 @@ app
     res.redirect(`/urls/${req.params["shortURL"]}`);
   });
 
-app.get("/urls/new", (req, res) => {
-  if (users[req.session.user_id]) {
-    const templateVars = { user: users[req.session.user_id] };
-    res.render("urls_new", templateVars);
-  } else {
-    res.redirect("/login");
-  }
+// ./urls/:shortURL/delete >> Delete a redirection (POST)
+app.post("/urls/:shortURL/delete", (req, res) => {
+  urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
+  res.redirect("/urls");
+  console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
 });
 
+// ./urls.json >> public API giving access to url redirection database
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// ./u/:shortURL >> redirecting to longURL as instructed by the urlDatabase
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase.getLongUrl(req.params.shortURL);
   // Check if URL exists in DB
@@ -89,44 +147,4 @@ app.get("/u/:shortURL", (req, res) => {
   } else {
     res.status(404).end();
   }
-});
-
-app
-  .route("/login")
-  .get((req, res) => {
-    const templateVars = { user: users[req.session.user_id] };
-    res.render("login", templateVars);
-  })
-  .post((req, res) => {
-    const matchingUserID = users.loginCheck(req.body);
-    if (matchingUserID) {
-      req.session.user_id = matchingUserID;
-      res.redirect("/urls");
-    } else {
-      res.status(403).end("403");
-    }
-  });
-
-app
-  .route("/register")
-  .get((req, res) => {
-    const templateVars = { user: users[req.session.user_id] };
-    res.render("register", templateVars);
-  })
-  .post((req, res) => {
-    console.log(req.body);
-    console.log(users);
-    const newUser = users.register(req.body);
-    if (newUser) {
-      req.session.user_id = newUser.id;
-      res.redirect("/urls");
-    } else {
-      res.status(400).end("400");
-    }
-  });
-
-// Logout
-app.post("/logout", (req, res) => {
-  req.session = null;
-  res.redirect("/urls");
 });
