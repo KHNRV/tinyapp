@@ -21,7 +21,14 @@ const urlDatabase = {
     }
     return false;
   },
-  modifyLink: function(linkID, longURL, userID) {},
+  modifyLink: function(linkID, longURL, userID) {
+    // If user is authorized, modifyt the link
+    if (this[linkID].userID === userID) {
+      this[linkID].longURL = longURL;
+      return true;
+    }
+    return false;
+  },
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" },
 };
