@@ -91,21 +91,26 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+app
+  .route("/login")
+  .get((req, res) => {
+    const templateVars = { user: users[req.session.user_id] };
+    res.render("login", templateVars);
+  })
+  .post((req, res) => {
+    const matchingUserID = users.loginCheck(req.body);
+    if (matchingUserID) {
+      req.session.user_id = matchingUserID;
+      res.redirect("/urls");
+    } else {
+      res.status(403).end("403");
+    }
+  });
+
 // Logout
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls");
-});
-
-// Login
-app.post("/login", (req, res) => {
-  const matchingUserID = users.loginCheck(req.body);
-  if (matchingUserID) {
-    req.session.user_id = matchingUserID;
-    res.redirect("/urls");
-  } else {
-    res.status(403).end("403");
-  }
 });
 
 // Registration
@@ -125,9 +130,4 @@ app.post("/register", (req, res) => {
 app.get("/register", (req, res) => {
   const templateVars = { user: users[req.session.user_id] };
   res.render("register", templateVars);
-});
-
-app.get("/login", (req, res) => {
-  const templateVars = { user: users[req.session.user_id] };
-  res.render("login", templateVars);
 });
