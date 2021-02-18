@@ -1,7 +1,6 @@
 // Import libraries and modules
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const { generateRandomString } = require("./helper/generate.js");
 const { users } = require("./db/users");
 const { urlDatabase } = require("./db/urls");
@@ -11,7 +10,6 @@ const cookieSession = require("cookie-session");
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 const PORT = 8080; // default port 8080
 app.listen(PORT, () => {
   console.log(`TinyURL is listening on port ${PORT}!`);
