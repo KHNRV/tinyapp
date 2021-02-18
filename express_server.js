@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { generateRandomString } = require("./helper/generate.js");
 const { users } = require("./db/users");
-const urlDatabase = require("./db/urls");
+const { urlDatabase } = require("./db/urls");
 
 // Configure Express
 const app = express();
@@ -18,10 +18,10 @@ app.listen(PORT, () => {
 
 // POST ROUTING
 app.post("/urls", (req, res) => {
-  const shortURL = generateRandomString();
-  console.log(req.body); // Log the POST request body to the console
-  console.log("New short URL:", shortURL); // Log the new shortURL
-  urlDatabase[shortURL] = req.body.longURL; // add the new entry to the db
+  const shortURL = urlDatabase.addLink(
+    req.body["longURL"],
+    req.cookies["user_id"]
+  );
   res.redirect(`urls/${shortURL}`);
 });
 
