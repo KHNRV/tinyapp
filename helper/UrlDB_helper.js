@@ -16,7 +16,8 @@ class UrlDB {
       newShortURL = generateRandomString();
     } while (this[newShortURL]);
     // add the redirection to the db
-    this[newShortURL] = { longURL, userID };
+    const trimedLongURL = longURL.trim();
+    this[newShortURL] = { trimedLongURL, userID };
     // return  newTinyURL object
     console.log(this[newShortURL]);
     return newShortURL;
@@ -34,7 +35,7 @@ class UrlDB {
   modifyLink(linkID, longURL, userID) {
     // If user is authorized, modifyt the link
     if (this[linkID].userID === userID) {
-      this[linkID].longURL = longURL;
+      this[linkID].longURL = longURL.trim();
       return true;
     }
     return false;
