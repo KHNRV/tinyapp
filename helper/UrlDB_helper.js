@@ -1,10 +1,11 @@
 const { generateRandomString } = require("./helper");
 
 class UrlDB {
-  constructor() {
-    // Test entries
-    this.b6UTxQ = { longURL: "https://www.tsn.ca", userID: "kevin.nicolas" };
-    this.i3BoGr = { longURL: "https://www.google.ca", userID: "aJ48lW" };
+  constructor(baseDB) {
+    // Add baseDB values to this instance
+    for (const shortURL in baseDB) {
+      this[shortURL] = baseDB[shortURL];
+    }
   }
 
   addLink(longURL, userID) {
