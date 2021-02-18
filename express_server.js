@@ -66,7 +66,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/urls/:shortURL", (req, res) => {
   urlDatabase.modifyLink(
     req.params["shortURL"],
-    req.params["newURL"],
+    req.body["newURL"],
     req.cookies["user_id"]
   );
   res.redirect(`/urls/${req.params["shortURL"]}`);
