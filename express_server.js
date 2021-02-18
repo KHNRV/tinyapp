@@ -1,7 +1,6 @@
 // Import libraries and modules
 const express = require("express");
 const bodyParser = require("body-parser");
-const { generateRandomString } = require("./helper/generate.js");
 const { users } = require("./db/users");
 const { urlDatabase } = require("./db/urls");
 const cookieSession = require("cookie-session");

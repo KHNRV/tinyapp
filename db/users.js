@@ -1,4 +1,4 @@
-const { generateRandomString, getUserByEmail } = require("../helper/generate");
+const { generateRandomString } = require("../helper/generate");
 const bcrypt = require("bcrypt");
 
 class UserDB {
@@ -26,7 +26,7 @@ class UserDB {
     }
 
     // Is email already used
-    if (getUserByEmail(user.email, this)) {
+    if (this.getUserByEmail(user.email, this)) {
       return null;
     }
 
@@ -46,7 +46,7 @@ class UserDB {
   }
   loginCheck(credentials) {
     // Test if the email exists
-    const userID = getUserByEmail(credentials.email, this);
+    const userID = this.getUserByEmail(credentials.email, this);
     if (userID) {
       // Test if the associated password match the user input
       if (bcrypt.compareSync(credentials.password, this[userID].password)) {
@@ -55,6 +55,27 @@ class UserDB {
       }
     }
     // Return "" otherwise
+    return "";
+  }
+  /**
+   * This function output whether if a given email exist already in a given
+   * database of users
+   * @param {string} email
+   * @param {object} users
+   * @return {string} - if match, return user id. Else, false
+   */
+  getUserByEmail(email) {
+    // make users db an array
+    const usersArr = Object.values(this);
+    // check if the email exist
+    for (const user of usersArr) {
+      console.log("user.email:", user.email);
+      if (email === user.email) {
+        // if yes, return user id
+        return user.id;
+      }
+      // if no, return false
+    }
     return "";
   }
 }
