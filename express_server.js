@@ -64,10 +64,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 // Update redirection
 app.post("/urls/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL;
-  const newURL = req.body.newURL;
-  urlDatabase[shortURL] = newURL;
-  res.redirect(`/urls/${shortURL}`);
+  urlDatabase.modifyLink(
+    req.params["shortURL"],
+    req.params["newURL"],
+    req.cookies["user_id"]
+  );
+  res.redirect(`/urls/${req.params["shortURL"]}`);
 });
 
 // GET ROUTING
