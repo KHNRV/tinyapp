@@ -57,8 +57,7 @@ app.post("/register", (req, res) => {
 
 // Delete a redirection
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const shortURL = req.params.shortURL;
-  delete urlDatabase[shortURL];
+  urlDatabase.deleteLink(req.params["shortURL"], req.cookies["user_id"]);
   res.redirect("/urls");
   console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
 });
