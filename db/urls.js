@@ -38,6 +38,9 @@ class UrlDB {
     }
     return false;
   }
+  getLongUrl(linkID) {
+    return this[linkID].longURL;
+  }
 }
 
 const urlDatabase = new UrlDB();
