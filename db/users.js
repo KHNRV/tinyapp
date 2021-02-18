@@ -1,7 +1,4 @@
-const {
-  generateRandomString,
-  isEmailDuplicate,
-} = require("../helper/generate");
+const { generateRandomString, getUserByEmail } = require("../helper/generate");
 const bcrypt = require("bcrypt");
 
 class UserDB {
@@ -29,7 +26,7 @@ class UserDB {
     }
 
     // Is email already used
-    if (isEmailDuplicate(user.email, this)) {
+    if (getUserByEmail(user.email, this)) {
       return null;
     }
 
@@ -49,7 +46,7 @@ class UserDB {
   }
   loginCheck(credentials) {
     // Test if the email exists
-    const userID = isEmailDuplicate(credentials.email, this);
+    const userID = getUserByEmail(credentials.email, this);
     if (userID) {
       // Test if the associated password match the user input
       if (bcrypt.compareSync(credentials.password, this[userID].password)) {

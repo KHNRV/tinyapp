@@ -26,7 +26,7 @@ const generateRandomString = () => {
  * @param {object} users
  * @return {string} - if match, return user id. Else, false
  */
-const isEmailDuplicate = (email, users) => {
+const getUserByEmail = (email, users) => {
   // make users db an array
   const usersArr = Object.values(users);
   // check if the email exist
@@ -41,4 +41,4 @@ const isEmailDuplicate = (email, users) => {
   return "";
 };
 
-module.exports = { generateRandomString, isEmailDuplicate };
+module.exports = { generateRandomString, getUserByEmail };
