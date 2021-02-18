@@ -1,4 +1,4 @@
-const generateRandomString = require("../helper/generate");
+const { generateRandomString } = require("../helper/generate");
 
 const urlDatabase = {
   addLink: function(longURL, userID) {
@@ -11,7 +11,8 @@ const urlDatabase = {
     // add the redirection to the db
     this[newShortURL] = { longURL, userID };
     // return  newTinyURL object
-    return this[newShortURL];
+    console.log(this[newShortURL]);
+    return newShortURL;
   },
   deleteLink: function(linkID, userID) {
     // If user is authorized, delete the link
