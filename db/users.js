@@ -2,6 +2,7 @@ const {
   generateRandomString,
   isEmailDuplicate,
 } = require("../helper/generate");
+const bcrypt = require("bcrypt");
 
 const users = {
   register: function(user) {
@@ -22,7 +23,8 @@ const users = {
       newID = generateRandomString();
     } while (this[newID]);
     // Get the user details
-    const { email, password } = user;
+    const { email } = user;
+    const password = bcrypt.hashSync(user.password, 10);
     // Register the user in the db under newID
     this[newID] = { id: newID, email, password };
     // Return new user
