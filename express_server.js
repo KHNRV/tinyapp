@@ -19,6 +19,14 @@ app.use(
     keys: ["8sedLL65XkQpHAA6ksCPcHfJHhpELjGsxi7?S$hy"],
   })
 );
+/**
+ *
+ * HOME ROUTE
+ *
+ */
+app.get("/", (req, res) => {
+  res.redirect("/urls");
+});
 
 /**
  *
@@ -123,7 +131,7 @@ app
       req.body["newURL"],
       req.session.user_id
     );
-    res.redirect(`/urls/${req.params["shortURL"]}`);
+    res.redirect(`/urls`);
   });
 
 // ./urls/:shortURL/delete >> Delete a redirection (POST)
