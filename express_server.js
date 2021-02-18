@@ -114,10 +114,9 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL];
+  const longURL = urlDatabase.getLongUrl(req.params.shortURL);
   // Check if URL exists in DB
-  if (Object.keys(urlDatabase).includes(shortURL)) {
+  if (longURL) {
     res.redirect(longURL);
   } else {
     res.status(404).end();
