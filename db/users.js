@@ -1,4 +1,4 @@
-const { generateRandomString } = require("../helper/generate");
+const { generateRandomString } = require("../helper/helper");
 const bcrypt = require("bcrypt");
 
 class UserDB {
