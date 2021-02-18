@@ -20,13 +20,75 @@ app.use(
   })
 );
 
-// POST ROUTING
-app.post("/urls", (req, res) => {
-  const shortURL = urlDatabase.addLink(
-    req.body["longURL"],
-    req.session.user_id
-  );
-  res.redirect(`urls/${shortURL}`);
+// URLS ROUTES
+app
+  .route("/urls")
+  .get((req, res) => {
+    if (users[req.session.user_id]) {
+      const templateVars = {
+        urls: urlDatabase.getUrlsForUser(req.session.user_id),
+        user: users[req.session.user_id],
+      };
+      res.render("urls_index", templateVars);
+    } else {
+      res.redirect("/login");
+    }
+  })
+  .post((req, res) => {
+    const shortURL = urlDatabase.addLink(
+      req.body["longURL"],
+      req.session.user_id
+    );
+    res.redirect(`urls/${shortURL}`);
+  });
+
+// Delete a redirection
+app.post("/urls/:shortURL/delete", (req, res) => {
+  urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
+  res.redirect("/urls");
+  console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
+});
+
+app
+  .route("/urls/:shortURL")
+  .get((req, res) => {
+    const templateVars = {
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+      user: users[req.session.user_id],
+    };
+    res.render("urls_show", templateVars);
+  }) // Update redirection
+  .post((req, res) => {
+    urlDatabase.modifyLink(
+      req.params["shortURL"],
+      req.body["newURL"],
+      req.session.user_id
+    );
+    res.redirect(`/urls/${req.params["shortURL"]}`);
+  });
+
+app.get("/urls/new", (req, res) => {
+  if (users[req.session.user_id]) {
+    const templateVars = { user: users[req.session.user_id] };
+    res.render("urls_new", templateVars);
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.get("/urls.json", (req, res) => {
+  res.json(urlDatabase);
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase.getLongUrl(req.params.shortURL);
+  // Check if URL exists in DB
+  if (longURL) {
+    res.redirect(longURL);
+  } else {
+    res.status(404).end();
+  }
 });
 
 // Logout
@@ -59,23 +121,6 @@ app.post("/register", (req, res) => {
   }
 });
 
-// Delete a redirection
-app.post("/urls/:shortURL/delete", (req, res) => {
-  urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
-  res.redirect("/urls");
-  console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
-});
-
-// Update redirection
-app.post("/urls/:shortURL", (req, res) => {
-  urlDatabase.modifyLink(
-    req.params["shortURL"],
-    req.body["newURL"],
-    req.session.user_id
-  );
-  res.redirect(`/urls/${req.params["shortURL"]}`);
-});
-
 // GET ROUTING
 app.get("/register", (req, res) => {
   const templateVars = { user: users[req.session.user_id] };
@@ -85,48 +130,4 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   const templateVars = { user: users[req.session.user_id] };
   res.render("login", templateVars);
-});
-
-app.get("/urls/new", (req, res) => {
-  if (users[req.session.user_id]) {
-    const templateVars = { user: users[req.session.user_id] };
-    res.render("urls_new", templateVars);
-  } else {
-    res.redirect("/login");
-  }
-});
-
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
-app.get("/urls", (req, res) => {
-  if (users[req.session.user_id]) {
-    const templateVars = {
-      urls: urlDatabase.getUrlsForUser(req.session.user_id),
-      user: users[req.session.user_id],
-    };
-    res.render("urls_index", templateVars);
-  } else {
-    res.redirect("/login");
-  }
-});
-
-app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL,
-    user: users[req.session.user_id],
-  };
-  res.render("urls_show", templateVars);
-});
-
-app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase.getLongUrl(req.params.shortURL);
-  // Check if URL exists in DB
-  if (longURL) {
-    res.redirect(longURL);
-  } else {
-    res.status(404).end();
-  }
 });
