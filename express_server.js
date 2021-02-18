@@ -107,27 +107,26 @@ app
     }
   });
 
+app
+  .route("/register")
+  .get((req, res) => {
+    const templateVars = { user: users[req.session.user_id] };
+    res.render("register", templateVars);
+  })
+  .post((req, res) => {
+    console.log(req.body);
+    console.log(users);
+    const newUser = users.register(req.body);
+    if (newUser) {
+      req.session.user_id = newUser.id;
+      res.redirect("/urls");
+    } else {
+      res.status(400).end("400");
+    }
+  });
+
 // Logout
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls");
-});
-
-// Registration
-app.post("/register", (req, res) => {
-  console.log(req.body);
-  console.log(users);
-  const newUser = users.register(req.body);
-  if (newUser) {
-    req.session.user_id = newUser.id;
-    res.redirect("/urls");
-  } else {
-    res.status(400).end("400");
-  }
-});
-
-// GET ROUTING
-app.get("/register", (req, res) => {
-  const templateVars = { user: users[req.session.user_id] };
-  res.render("register", templateVars);
 });
