@@ -3,7 +3,6 @@ const error = {
   render: function(code, req, res) {
     const templateVars = {
       error: this[code.toString()],
-      user: users[req.session.user_id],
     };
     res.status(code).render("error", templateVars);
   },
