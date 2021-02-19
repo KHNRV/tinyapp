@@ -41,7 +41,11 @@ class UrlDB {
     return false;
   }
   getLongUrl(linkID) {
-    return this[linkID].longURL;
+    if (this[linkID]) {
+      return this[linkID].longURL;
+    } else {
+      return null;
+    }
   }
   getUrlsForUser(userID) {
     // Define userLinks object
