@@ -103,11 +103,15 @@ app
     }
   })
   .post((req, res) => {
-    const shortURL = urlDatabase.addLink(
-      req.body["longURL"],
-      req.session.user_id
-    );
-    res.redirect(`urls/${shortURL}`);
+    if (users.getByCookie(req)) {
+      const shortURL = urlDatabase.addLink(
+        req.body["longURL"],
+        req.session.user_id
+      );
+      res.redirect(`urls/${shortURL}`);
+    } else {
+      error.render(401, res);
+    }
   });
 
 // ./urls/new >> New redirection form
