@@ -139,7 +139,7 @@ app
 app.get("/urls/new", (req, res) => {
   const userID = req.session.user_id;
 
-  if (userID) {
+  if (users.isUser(userID)) {
     const templateVars = { user: users[userID] };
     res.render("urls_new", templateVars);
   } else {
