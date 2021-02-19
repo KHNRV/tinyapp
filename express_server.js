@@ -63,8 +63,13 @@ app
 app
   .route("/login")
   .get((req, res) => {
-    const templateVars = { user: users[req.session.user_id] };
-    res.render("login", templateVars);
+    const userID = req.session.user_id;
+    if (users.isUser(userID)) {
+      const templateVars = { user: users[userID] };
+      res.render("login", templateVars);
+    } else {
+      res.redirect("/urls");
+    }
   })
   .post((req, res) => {
     const matchingUserID = users.loginCheck(req.body);
