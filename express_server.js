@@ -169,9 +169,18 @@ app
 
 // ./urls/:shortURL/delete >> Delete a redirection (POST)
 app.post("/urls/:shortURL/delete", (req, res) => {
-  urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
-  res.redirect("/urls");
-  console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
+  // if user is logged in and owns the URL for the given ID
+  if (urlDatabase.getUrlsForUser(userID)[shortURL]) {
+    urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
+    res.redirect("/urls");
+    console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
+    // if user is logged in but does not own the URL for the given ID
+  } else if (users.isUser(userID)) {
+    error.render(403, req, res);
+  } else {
+    // if user is not logged in
+    error.render(401, req, res);
+  }
 });
 
 // ./urls.json >> public API giving access to url redirection database
