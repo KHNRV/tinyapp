@@ -97,7 +97,7 @@ app
 // ./logout >> Logging out user by clearing cookie
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("/urls");
+  res.redirect("/");
 });
 
 /**
