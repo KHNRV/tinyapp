@@ -26,7 +26,11 @@ app.use(
  *
  */
 app.get("/", (req, res) => {
-  res.redirect("/urls");
+  if (users[req.session.user_id]) {
+    res.redirect("/urls");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 /**
@@ -94,7 +98,11 @@ app
       };
       res.render("urls_index", templateVars);
     } else {
-      res.redirect("/login");
+      const templateVars = {
+        error: error["401"],
+        user: users[req.session.user_id],
+      };
+      res.status(401).render("error", templateVars);
     }
   })
   .post((req, res) => {
