@@ -65,7 +65,7 @@ class UserDB {
       }
       // if no, return false
     }
-    return "";
+    return null;
   }
   isUser(userID) {
     if (this[userID]) {
