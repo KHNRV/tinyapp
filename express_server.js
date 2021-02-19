@@ -60,7 +60,7 @@ app
       req.session.user_id = newUser.id;
       res.redirect("/urls");
     } else {
-      error.render(400, res);
+      error.render("duplicateUser", res);
     }
   });
 
