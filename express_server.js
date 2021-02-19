@@ -158,7 +158,7 @@ app
     if (urlDatabase.getUrlsForUser(userID)[shortURL]) {
       urlDatabase.modifyLink(shortURL, newURL, userID);
       res.redirect(`/urls`);
-      // if user is logged it but does not own the URL for the given ID
+      // if user is logged in but does not own the URL for the given ID
     } else if (users.isUser(userID)) {
       error.render(403, req, res);
     } else {
