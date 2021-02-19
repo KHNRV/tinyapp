@@ -127,12 +127,39 @@ app.get("/urls/new", (req, res) => {
 app
   .route("/urls/:shortURL")
   .get((req, res) => {
-    const templateVars = {
-      shortURL: req.params.shortURL,
-      longURL: urlDatabase[req.params.shortURL].longURL,
-      user: users[req.session.user_id],
-    };
-    res.render("urls_show", templateVars);
+    const userID = req.session.user_id;
+    const shortURL = req.params.shortURL;
+
+    // if user is connected and owner of that link
+    if (urlDatabase.getUrlsForUser(userID)[shortURL]) {
+      const templateVars = {
+        shortURL,
+        longURL: urlDatabase.getLongUrl(shortURL),
+        user: users[userID],
+      };
+      res.render("urls_show", templateVars);
+      // if user is connected but do not own that link
+    } else if (users[userID] && urlDatabase.getLongUrl(shortURL)) {
+      const templateVars = {
+        error: error["403"],
+        user: users[userID],
+      };
+      res.status(403).render(`error`, templateVars);
+      // if link exists but user is not connected
+    } else if (urlDatabase.getLongUrl(shortURL)) {
+      const templateVars = {
+        error: error["401"],
+        user: users[userID],
+      };
+      res.status(401).render(`error`, templateVars);
+      // if link does not exist
+    } else {
+      const templateVars = {
+        error: error["404"],
+        user: users[userID],
+      };
+      res.status(404).render(`error`, templateVars);
+    }
   }) // Update redirection
   .post((req, res) => {
     urlDatabase.modifyLink(
