@@ -138,10 +138,11 @@ app
 // ./urls/new >> New redirection form
 app.get("/urls/new", (req, res) => {
   const userID = req.session.user_id;
-
+  // if user is connected
   if (users.isUser(userID)) {
     const templateVars = { user: users[userID] };
     res.render("urls_new", templateVars);
+    // if user is not connected
   } else {
     res.redirect("/login");
   }
@@ -212,10 +213,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   const userID = req.session.user_id;
   const longURL = urlDatabase.getLongUrl(userID);
-  // Check if URL exists in DB
+  // if URL exists in DB
   if (longURL) {
     res.redirect(longURL);
   } else {
+    // if URL does not exists in DB
     error.render(404, res);
   }
 });
