@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-const e = require("express");
 
 const { users } = require("../db/users");
 
