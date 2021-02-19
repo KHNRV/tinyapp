@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { users } = require("./db/users");
 const { urlDatabase } = require("./db/urls");
-const { error } = require("./db/error");
+const { error } = require("./helper/error");
 const cookieSession = require("cookie-session");
 
 // Configure Express
@@ -20,14 +20,6 @@ app.use(
     keys: ["8sedLL65XkQpHAA6ksCPcHfJHhpELjGsxi7?S$hy"],
   })
 );
-
-const renderError = (code, req, res) => {
-  const templateVars = {
-    error: error[code.toString()],
-    user: users[req.session.user_id],
-  };
-  res.status(code).render("error", templateVars);
-};
 
 /**
  *
@@ -63,7 +55,7 @@ app
       req.session.user_id = newUser.id;
       res.redirect("/urls");
     } else {
-      renderError(400, req, res);
+      error.render(400, req, res);
     }
   });
 
@@ -107,7 +99,7 @@ app
       };
       res.render("urls_index", templateVars);
     } else {
-      renderError(401, req, res);
+      error.render(401, req, res);
     }
   })
   .post((req, res) => {
@@ -145,13 +137,13 @@ app
       res.render("urls_show", templateVars);
       // if user is connected but do not own that link
     } else if (users[userID] && urlDatabase.getLongUrl(shortURL)) {
-      renderError(403, req, res);
+      error.render(403, req, res);
       // if link exists but user is not connected
     } else if (urlDatabase.getLongUrl(shortURL)) {
-      renderError(401, req, res);
+      error.render(401, req, res);
       // if link does not exist
     } else {
-      renderError(404, req, res);
+      error.render(404, req, res);
     }
   }) // Update redirection
   .post((req, res) => {
@@ -182,11 +174,11 @@ app.get("/u/:shortURL", (req, res) => {
   if (longURL) {
     res.redirect(longURL);
   } else {
-    renderError(404, req, res);
+    error.render(404, req, res);
   }
 });
 
 // ./:any >> redirect to 404 Error page
 app.get("/:any", (req, res) => {
-  renderError(404, req, res);
+  error.render(404, req, res);
 });
