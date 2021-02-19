@@ -82,7 +82,7 @@ app
       req.session.user_id = matchingUserID;
       res.redirect("/urls");
     } else {
-      res.status(403).end("403");
+      error.render("wrongCredentials", res);
     }
   });
 
