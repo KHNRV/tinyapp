@@ -199,7 +199,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   if (urlDatabase.getUrlsForUser(userID)[shortURL]) {
     urlDatabase.deleteLink(req.params["shortURL"], userID);
     res.redirect("/urls");
-    console.log(`Entry ${shortURL} deleted.`); // Log the POST request body to the console
     // if user is logged in but does not own the URL for the given ID
   } else if (users.isUser(userID)) {
     error.render(403, res);

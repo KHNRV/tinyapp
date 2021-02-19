@@ -19,7 +19,6 @@ class UrlDB {
     const trimedLongURL = longURL.trim();
     this[newShortURL] = { trimedLongURL, userID };
     // return  newTinyURL object
-    console.log(this[newShortURL]);
     return newShortURL;
   }
 

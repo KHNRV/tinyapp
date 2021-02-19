@@ -58,7 +58,6 @@ class UserDB {
     const usersArr = Object.values(this);
     // check if the email exist
     for (const user of usersArr) {
-      console.log("user.email:", user.email);
       if (email === user.email) {
         // if yes, return user id
         return user.id;
