@@ -74,14 +74,6 @@ class UserDB {
       return false;
     }
   }
-
-  getByCookie(req) {
-    const userID = req.session.user_id;
-    if (this.isUser(userID)) {
-      return userID;
-    }
-    return null;
-  }
 }
 
 module.exports = { UserDB };
