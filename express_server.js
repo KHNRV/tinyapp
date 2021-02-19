@@ -27,7 +27,9 @@ app.use(
  *
  */
 app.get("/", (req, res) => {
-  if (users[req.session.user_id]) {
+  const userID = req.session.user_id;
+
+  if (users[userID]) {
     res.redirect("/urls");
   } else {
     res.redirect("/login");
@@ -102,7 +104,8 @@ app.post("/logout", (req, res) => {
 app
   .route("/urls")
   .get((req, res) => {
-    if (users[req.session.user_id]) {
+    const userID = req.session.user_id;
+    if (users[userID]) {
       const templateVars = {
         urls: urlDatabase.getUrlsForUser(req.session.user_id),
         user: users[req.session.user_id],
@@ -113,11 +116,9 @@ app
     }
   })
   .post((req, res) => {
-    if (users.getByCookie(req)) {
-      const shortURL = urlDatabase.addLink(
-        req.body["longURL"],
-        req.session.user_id
-      );
+    const userID = req.session.user_id;
+    if (users.isUser(userID)) {
+      const shortURL = urlDatabase.addLink(req.body["longURL"], userID);
       res.redirect(`urls/${shortURL}`);
     } else {
       error.render(401, res);
@@ -126,8 +127,10 @@ app
 
 // ./urls/new >> New redirection form
 app.get("/urls/new", (req, res) => {
-  if (users[req.session.user_id]) {
-    const templateVars = { user: users[req.session.user_id] };
+  const userID = req.session.user_id;
+
+  if (userID) {
+    const templateVars = { user: users[userID] };
     res.render("urls_new", templateVars);
   } else {
     res.redirect("/login");
@@ -179,11 +182,13 @@ app
 
 // ./urls/:shortURL/delete >> Delete a redirection (POST)
 app.post("/urls/:shortURL/delete", (req, res) => {
+  const userID = req.session.user_id;
+  const shortURL = req.params.shortURL;
   // if user is logged in and owns the URL for the given ID
   if (urlDatabase.getUrlsForUser(userID)[shortURL]) {
-    urlDatabase.deleteLink(req.params["shortURL"], req.session.user_id);
+    urlDatabase.deleteLink(req.params["shortURL"], userID);
     res.redirect("/urls");
-    console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
+    console.log(`Entry ${shortURL} deleted.`); // Log the POST request body to the console
     // if user is logged in but does not own the URL for the given ID
   } else if (users.isUser(userID)) {
     error.render(403, res);
@@ -200,7 +205,8 @@ app.get("/urls.json", (req, res) => {
 
 // ./u/:shortURL >> redirecting to longURL as instructed by the urlDatabase
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase.getLongUrl(req.params.shortURL);
+  const userID = req.session.user_id;
+  const longURL = urlDatabase.getLongUrl(userID);
   // Check if URL exists in DB
   if (longURL) {
     res.redirect(longURL);
