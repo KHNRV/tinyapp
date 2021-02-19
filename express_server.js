@@ -151,12 +151,20 @@ app
     }
   }) // Update redirection
   .post((req, res) => {
-    urlDatabase.modifyLink(
-      req.params["shortURL"],
-      req.body["newURL"],
-      req.session.user_id
-    );
-    res.redirect(`/urls`);
+    const userID = req.session.user_id;
+    const shortURL = req.params.shortURL;
+    const newURL = req.body["newURL"];
+    // if user is logged in and owns the URL for the given ID
+    if (urlDatabase.getUrlsForUser(userID)[shortURL]) {
+      urlDatabase.modifyLink(shortURL, newURL, userID);
+      res.redirect(`/urls`);
+      // if user is logged it but does not own the URL for the given ID
+    } else if (users.isUser(userID)) {
+      error.render(403, req, res);
+    } else {
+      // if user is not logged in
+      error.render(401, req, res);
+    }
   });
 
 // ./urls/:shortURL/delete >> Delete a redirection (POST)
