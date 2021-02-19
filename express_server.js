@@ -29,7 +29,7 @@ app.use(
 app.get("/", (req, res) => {
   const userID = req.session.user_id;
 
-  if (users[userID]) {
+  if (users.isUser(userID)) {
     res.redirect("/urls");
   } else {
     res.redirect("/login");
@@ -47,20 +47,22 @@ app
   .route("/register")
   .get((req, res) => {
     const userID = req.session.user_id;
+    // if user is connected
     if (users.isUser(userID)) {
       res.redirect("/urls");
+      // if user is not connected
     } else {
       const templateVars = { user: users[userID] };
       res.render("register", templateVars);
     }
   })
   .post((req, res) => {
-    console.log(req.body);
-    console.log(users);
     const newUser = users.register(req.body);
+    // if account creation is a success
     if (newUser) {
       req.session.user_id = newUser.id;
       res.redirect("/urls");
+      // if account creation failed
     } else {
       error.render("duplicateUser", res);
     }
@@ -71,8 +73,10 @@ app
   .route("/login")
   .get((req, res) => {
     const userID = req.session.user_id;
+    // if user is connected
     if (users.isUser(userID)) {
       res.redirect("/urls");
+      // if user is not connected
     } else {
       const templateVars = { user: users[userID] };
       res.render("login", templateVars);
@@ -80,9 +84,11 @@ app
   })
   .post((req, res) => {
     const matchingUserID = users.loginCheck(req.body);
+    // if login is a success
     if (matchingUserID) {
       req.session.user_id = matchingUserID;
       res.redirect("/urls");
+      // if login failed
     } else {
       error.render("wrongCredentials", res);
     }
@@ -105,21 +111,25 @@ app
   .route("/urls")
   .get((req, res) => {
     const userID = req.session.user_id;
-    if (users[userID]) {
+    // if user is connected
+    if (users.isUser(userID)) {
       const templateVars = {
         urls: urlDatabase.getUrlsForUser(req.session.user_id),
         user: users[req.session.user_id],
       };
       res.render("urls_index", templateVars);
+      // if user is not connected
     } else {
       error.render(401, res);
     }
   })
   .post((req, res) => {
     const userID = req.session.user_id;
+    // if user is connected
     if (users.isUser(userID)) {
       const shortURL = urlDatabase.addLink(req.body["longURL"], userID);
       res.redirect(`urls/${shortURL}`);
+      // if user is not connected
     } else {
       error.render(401, res);
     }
