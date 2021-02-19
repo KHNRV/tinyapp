@@ -2,9 +2,9 @@ const { users } = require("../db/users");
 const error = {
   render: function(code, res) {
     const templateVars = {
-      error: this[code.toString()],
+      error: this[code],
     };
-    res.status(code).render("error", templateVars);
+    res.status(this[code].code).render("error", templateVars);
   },
   400: {
     code: 400,
@@ -36,6 +36,22 @@ const error = {
       "I cannot find what you are asking for. Although, I do have an amazing 4K 60FPS video that explains what happend!",
     solutionLink: "https://youtu.be/2ocykBzWDiM",
     solutionMessage: "Watch 404 Explained",
+  },
+  duplicateUser: {
+    code: 400,
+    message: "I guess you have a twin.",
+    description:
+      "This email is already know by our agency. Please do not attempt identity theft",
+    solutionLink: "/register",
+    solutionMessage: "Register (with another email address)",
+  },
+  wrongCredentials: {
+    code: 403,
+    message: "Mmmhhhh, not sure if it's really you...",
+    description:
+      "Your email and password combinaison does not match our super secured user database",
+    solutionLink: "/login",
+    solutionMessage: "Try again",
   },
 };
 
