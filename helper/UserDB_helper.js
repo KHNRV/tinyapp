@@ -43,8 +43,8 @@ class UserDB {
         return userID;
       }
     }
-    // Return "" otherwise
-    return "";
+    // Return  otherwise
+    return null;
   }
   /**
    * This function output whether if a given email exist already in a given
