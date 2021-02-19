@@ -15,7 +15,7 @@ class UserDB {
     }
 
     // Is email already used
-    if (this.getUserByEmail(user.email, this)) {
+    if (this.getByEmail(user.email, this)) {
       return null;
     }
 
@@ -35,7 +35,7 @@ class UserDB {
   }
   loginCheck(credentials) {
     // Test if the email exists
-    const userID = this.getUserByEmail(credentials.email, this);
+    const userID = this.getByEmail(credentials.email, this);
     if (userID) {
       // Test if the associated password match the user input
       if (bcrypt.compareSync(credentials.password, this[userID].password)) {
@@ -53,7 +53,7 @@ class UserDB {
    * @param {object} users
    * @return {string} - if match, return user id. Else, false
    */
-  getUserByEmail(email) {
+  getByEmail(email) {
     // make users db an array
     const usersArr = Object.values(this);
     // check if the email exist
@@ -73,6 +73,14 @@ class UserDB {
     } else {
       return false;
     }
+  }
+
+  getByCookie(req) {
+    const userID = req.session.user_id;
+    if (this.isUser(userID)) {
+      return userID;
+    }
+    return null;
   }
 }
 
