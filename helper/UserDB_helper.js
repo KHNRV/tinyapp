@@ -8,6 +8,10 @@ class UserDB {
       this[user] = baseDB[user];
     }
   }
+  /**
+   * This function adds a user to the database
+   * @param {object} user
+   */
   register(user) {
     // Is entry valid ?
     if (!user.email || !user.password) {
@@ -33,6 +37,11 @@ class UserDB {
     // Return new user
     return this[newID];
   }
+  /**
+   * This function check if the given creditals match the ones in the database.
+   * This function authorize the login process.
+   * @param {object} credentials
+   */
   loginCheck(credentials) {
     // Test if the email exists
     const userID = this.getByEmail(credentials.email, this);
@@ -66,6 +75,11 @@ class UserDB {
     }
     return null;
   }
+  /**
+   * This function returns, for a given userID, whether the user exists in the
+   * database
+   * @param {string} userID
+   */
   isUser(userID) {
     if (this[userID]) {
       return true;

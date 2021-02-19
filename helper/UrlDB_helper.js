@@ -7,7 +7,11 @@ class UrlDB {
       this[shortURL] = baseDB[shortURL];
     }
   }
-
+  /**
+   * This function adds a new redirection link to the database
+   * @param {string} longURL
+   * @param {string} userID
+   */
   addLink(longURL, userID) {
     // Define newShortURL
     let newShortURL = "";
@@ -22,6 +26,11 @@ class UrlDB {
     return newShortURL;
   }
 
+  /**
+   * This function deletes a user from the database
+   * @param {string} linkID
+   * @param {string} userID
+   */
   deleteLink(linkID, userID) {
     // If user is authorized, delete the link
     if (this[linkID].userID === userID) {
@@ -31,6 +40,12 @@ class UrlDB {
     return false;
   }
 
+  /**
+   * This function modify a redirection in the database
+   * @param {*} linkID
+   * @param {*} longURL
+   * @param {*} userID
+   */
   modifyLink(linkID, longURL, userID) {
     // If user is authorized, modifyt the link
     if (this[linkID].userID === userID) {
@@ -39,6 +54,10 @@ class UrlDB {
     }
     return false;
   }
+  /**
+   * This function returns the longURL associated with a shortURL
+   * @param {string} linkID
+   */
   getLongUrl(linkID) {
     if (this[linkID]) {
       return this[linkID].longURL;
@@ -46,6 +65,11 @@ class UrlDB {
       return null;
     }
   }
+  /**
+   * This function returns an object of all the redirection owned by a given
+   * user
+   * @param {*} userID
+   */
   getUrlsForUser(userID) {
     // Define userLinks object
     const userLinks = {};
