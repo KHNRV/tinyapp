@@ -198,11 +198,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   }
 });
 
-// ./urls.json >> public API giving access to url redirection database
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
 // ./u/:shortURL >> redirecting to longURL as instructed by the urlDatabase
 app.get("/u/:shortURL", (req, res) => {
   const userID = req.session.user_id;
