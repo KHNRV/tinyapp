@@ -18,7 +18,7 @@ const error = {
     code: 403,
     message: "WOW, stop right there!",
     description:
-      "It looks like you have no buisiness trying to access that page",
+      "It looks like you have no business trying to access that page",
     solutionLink: "/",
     solutionMessage: "Please move along",
   },
