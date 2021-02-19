@@ -1,6 +1,6 @@
 const { users } = require("../db/users");
 const error = {
-  render: function(code, req, res) {
+  render: function(code, res) {
     const templateVars = {
       error: this[code.toString()],
     };
