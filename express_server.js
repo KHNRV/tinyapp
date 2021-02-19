@@ -44,8 +44,13 @@ app.get("/", (req, res) => {
 app
   .route("/register")
   .get((req, res) => {
-    const templateVars = { user: users[req.session.user_id] };
-    res.render("register", templateVars);
+    const userID = req.session.user_id;
+    if (users.isUser(userID)) {
+      res.redirect("/urls");
+    } else {
+      const templateVars = { user: users[userID] };
+      res.render("register", templateVars);
+    }
   })
   .post((req, res) => {
     console.log(req.body);
@@ -55,7 +60,7 @@ app
       req.session.user_id = newUser.id;
       res.redirect("/urls");
     } else {
-      error.render(400, req, res);
+      error.render(400, res);
     }
   });
 
@@ -65,10 +70,10 @@ app
   .get((req, res) => {
     const userID = req.session.user_id;
     if (users.isUser(userID)) {
+      res.redirect("/urls");
+    } else {
       const templateVars = { user: users[userID] };
       res.render("login", templateVars);
-    } else {
-      res.redirect("/urls");
     }
   })
   .post((req, res) => {
@@ -104,7 +109,7 @@ app
       };
       res.render("urls_index", templateVars);
     } else {
-      error.render(401, req, res);
+      error.render(401, res);
     }
   })
   .post((req, res) => {
@@ -146,13 +151,13 @@ app
       res.render("urls_show", templateVars);
       // if user is connected but do not own that link
     } else if (users[userID] && urlDatabase.getLongUrl(shortURL)) {
-      error.render(403, req, res);
+      error.render(403, res);
       // if link exists but user is not connected
     } else if (urlDatabase.getLongUrl(shortURL)) {
-      error.render(401, req, res);
+      error.render(401, res);
       // if link does not exist
     } else {
-      error.render(404, req, res);
+      error.render(404, res);
     }
   }) // Update redirection
   .post((req, res) => {
@@ -165,10 +170,10 @@ app
       res.redirect(`/urls`);
       // if user is logged in but does not own the URL for the given ID
     } else if (users.isUser(userID)) {
-      error.render(403, req, res);
+      error.render(403, res);
     } else {
       // if user is not logged in
-      error.render(401, req, res);
+      error.render(401, res);
     }
   });
 
@@ -181,10 +186,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     console.log(`Entry ${req.params.shortURL} deleted.`); // Log the POST request body to the console
     // if user is logged in but does not own the URL for the given ID
   } else if (users.isUser(userID)) {
-    error.render(403, req, res);
+    error.render(403, res);
   } else {
     // if user is not logged in
-    error.render(401, req, res);
+    error.render(401, res);
   }
 });
 
@@ -200,11 +205,11 @@ app.get("/u/:shortURL", (req, res) => {
   if (longURL) {
     res.redirect(longURL);
   } else {
-    error.render(404, req, res);
+    error.render(404, res);
   }
 });
 
 // ./:any >> redirect to 404 Error page
 app.get("/:any", (req, res) => {
-  error.render(404, req, res);
+  error.render(404, res);
 });
