@@ -20,6 +20,15 @@ app.use(
     keys: ["8sedLL65XkQpHAA6ksCPcHfJHhpELjGsxi7?S$hy"],
   })
 );
+
+const renderError = (code, req, res) => {
+  const templateVars = {
+    error: error[code.toString()],
+    user: users[req.session.user_id],
+  };
+  res.status(code).render("error", templateVars);
+};
+
 /**
  *
  * HOME ROUTE
@@ -54,7 +63,7 @@ app
       req.session.user_id = newUser.id;
       res.redirect("/urls");
     } else {
-      res.status(400).end("400");
+      renderError(400, req, res);
     }
   });
 
@@ -98,11 +107,7 @@ app
       };
       res.render("urls_index", templateVars);
     } else {
-      const templateVars = {
-        error: error["401"],
-        user: users[req.session.user_id],
-      };
-      res.status(401).render("error", templateVars);
+      renderError(401, req, res);
     }
   })
   .post((req, res) => {
@@ -140,25 +145,13 @@ app
       res.render("urls_show", templateVars);
       // if user is connected but do not own that link
     } else if (users[userID] && urlDatabase.getLongUrl(shortURL)) {
-      const templateVars = {
-        error: error["403"],
-        user: users[userID],
-      };
-      res.status(403).render(`error`, templateVars);
+      renderError(403, req, res);
       // if link exists but user is not connected
     } else if (urlDatabase.getLongUrl(shortURL)) {
-      const templateVars = {
-        error: error["401"],
-        user: users[userID],
-      };
-      res.status(401).render(`error`, templateVars);
+      renderError(401, req, res);
       // if link does not exist
     } else {
-      const templateVars = {
-        error: error["404"],
-        user: users[userID],
-      };
-      res.status(404).render(`error`, templateVars);
+      renderError(404, req, res);
     }
   }) // Update redirection
   .post((req, res) => {
@@ -189,15 +182,11 @@ app.get("/u/:shortURL", (req, res) => {
   if (longURL) {
     res.redirect(longURL);
   } else {
-    res.status(404).end();
+    renderError(404, req, res);
   }
 });
 
 // ./:any >> redirect to 404 Error page
 app.get("/:any", (req, res) => {
-  const templateVars = {
-    error: error["404"],
-    user: users[req.session.user_id],
-  };
-  res.status(404).render("error", templateVars);
+  renderError(404, req, res);
 });
