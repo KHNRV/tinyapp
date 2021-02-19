@@ -67,6 +67,13 @@ class UserDB {
     }
     return "";
   }
+  isUser(userID) {
+    if (this[userID]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 module.exports = { UserDB };
