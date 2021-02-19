@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { users } = require("./db/users");
 const { urlDatabase } = require("./db/urls");
+const { error } = require("./db/error");
 const cookieSession = require("cookie-session");
 
 // Configure Express
@@ -155,4 +156,13 @@ app.get("/u/:shortURL", (req, res) => {
   } else {
     res.status(404).end();
   }
+});
+
+// ./:any >> redirect to 404 Error page
+app.get("/:any", (req, res) => {
+  const templateVars = {
+    error: error["404"],
+    user: users[req.session.user_id],
+  };
+  res.status(404).render("error", templateVars);
 });
