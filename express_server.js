@@ -222,6 +222,12 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+/**
+ *
+ * ERROR 404 ROUTE
+ *
+ */
+
 // ./:any >> redirect to 404 Error page
 app.get("/:any", (req, res) => {
   error.render(404, res);
