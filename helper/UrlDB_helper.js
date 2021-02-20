@@ -21,8 +21,8 @@ class UrlDB {
     } while (this[newShortURL]);
     // add the redirection to the db
     const trimedLongURL = longURL.trim();
-    this[newShortURL] = { trimedLongURL, userID };
-    // return  newTinyURL object
+    this[newShortURL] = { longURL: trimedLongURL, userID };
+    // return  newTinyURL
     return newShortURL;
   }
 
