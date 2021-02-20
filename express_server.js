@@ -210,8 +210,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 // ./u/:shortURL >> redirecting to longURL as instructed by the urlDatabase
 app.get("/u/:shortURL", (req, res) => {
-  const userID = req.session.user_id;
-  const longURL = urlDatabase.getLongUrl(userID);
+  const longURL = urlDatabase.getLongUrl(req.params.shortURL);
   // if URL exists in DB
   if (longURL) {
     res.redirect(longURL);
